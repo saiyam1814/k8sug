@@ -1,0 +1,26 @@
+## Instaling vcluster
+curl -L -o vcluster "https://github.com/loft-sh/vcluster/releases/download/v0.22.4/vcluster-linux-amd64" && sudo install -c -m 0755 vcluster /usr/local/bin && rm -f vcluster
+
+## Installing Falco on the host cluster
+helm repo add falcosecurity https://falcosecurity.github.io/charts
+helm repo update
+helm upgrade --install falco falcosecurity/falco --namespace falco --create-namespace
+
+
+## Create vCluster 
+kubectl create namespace vcluster
+vcluster create ssh -n vcluster
+
+## Install ssh 
+helm repo add securecodebox https://charts.securecodebox.io/
+helm repo update
+helm install my-dummy-ssh securecodebox/dummy-ssh --version 3.14.3 
+kubectl exec -it <podname> -- /bin/bash   
+passwd root (set the password)
+cat /etc/shadow
+## port forward and ssh intro the dummy ssh server
+kubectl port-forward svc/my-dummy-ssh 5555:22
+ssh -p 5555 root@127.0.0.1
+
+## Check host cluster logs for falco 
+kubectl logs -f daemonset/falco -n falco | grep shadow
