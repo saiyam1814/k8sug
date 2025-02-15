@@ -6,6 +6,9 @@ helm repo add falcosecurity https://falcosecurity.github.io/charts
 helm repo update
 helm upgrade --install falco falcosecurity/falco --namespace falco --create-namespace
 
+## Local path provisioner
+kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.31/deploy/local-path-storage.yaml
+kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
 ## Create vCluster 
 kubectl create namespace vcluster
