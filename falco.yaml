@@ -24,6 +24,6 @@ cat /etc/shadow
 ## port forward and ssh intro the dummy ssh server
 kubectl port-forward svc/my-dummy-ssh 5555:22
 ssh -p 5555 root@127.0.0.1
-
+kubectl config use-context kubernetes-admin@kubernetes
 ## Check host cluster logs for falco 
 kubectl logs -f daemonset/falco -n falco | grep shadow
